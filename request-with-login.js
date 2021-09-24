@@ -1,10 +1,17 @@
-// task h ki total solved problem ko print karana h
+// task h ki total solved problem ko print karana h: task done thanks to anand
 
+let obj=[];
 
+let l = 0;
+let idx=0;
 const request = require('request-promise').defaults({ jar:true});
 const fs = require("fs");
 const cheerio = require("cheerio");
-main();
+let count = 0;
+
+
+main()
+
 async function main(){   
     try{
 
@@ -24,28 +31,19 @@ async function main(){
                 
             }            
             ) ;
-            // fs.writeFileSync("./login.html",login);
-
-            // const url = "https://www.pepcoding.com/resources/online-java-foundation/stacks-and-queues";
-            // const url1 = "https://www.pepcoding.com/resources/online-java-foundation/recursion-with-arraylists";
-            // const url2 ="https://www.pepcoding.com/resources/online-java-foundation/introduction-to-recursion";
-
-
+         
 
             
 const url = 'https://www.pepcoding.com/resources/';
 const def = "https://www.pepcoding.com";
 
-let count = 0;
 
-main1()
+firstReq()
 // .then(res => console.log(count)).catch(err => console.log(err));
 
-async function main1(){
+function firstReq(){
    
-
-       let rek = await request(url,main)
-
+ request(url,main)
    
 }
 
@@ -62,7 +60,7 @@ function mainextract(html){
     let $ = cheerio.load(html);
     let q=$('.card-content.no-padding>div>a'); 
     for(let i=0;i<1;i++){
-        let link = $(q[i]).attr("href");
+        let link = $(q[l]).attr("href");
         let fulllink = def+link;
         topics(fulllink,i+1);
     
@@ -88,13 +86,13 @@ function modules(html,lvl){
     let linkArr = $('.collection-item.row.list-item a');
     let nameArr = $('.collection-item.row.list-item a .no-padding');
     let count=0;
+    idx=linkArr.length;
     for(let i=0;i<linkArr.length;i++){
         let name = $(nameArr[i]).text().trim();
         let link = $(linkArr[i]).attr("href");
-        // console.log("level ",lvl,name," ",link);
         let qlink = def+link;
         findquestions(qlink,lvl,name);
-        // console.log(findquestions(qlink,lvl,name));
+       
     }
     // console.log(count);
 
@@ -102,69 +100,56 @@ function modules(html,lvl){
 
 //now we have to find direct questions from modules
 
-async function findquestions(url,lvl,name,max,min){
-    // let res = await
-     request(url,fq);
-    // return res;
+function findquestions(url,lvl,name){
+    
+    request(url,fq);
     
     function fq(error,response,html){
         if(error){
             console.log(error);
         }else{
-            // count=count+findq(html,lvl,name);
-            // if(min==max)
-            // console.log(count);
-            // console.log(findq(html,lvl,name));
 
 
-            console.log("you solved", findq(html,lvl,name) ,"questions from level ",lvl," ",name);  
+        
+            obj.push(findq(html,lvl,name));
+            if(idx==obj.length){
+                display();
+            }
+
+        
+            // console.log("you solved", findq(html,lvl,name) ,"questions from level ",lvl," ",name);  
         }
     }
 }
 
-//questions        
 
+
+//questions        
 function findq(html,lvl,name){
     let $ = cheerio.load(html);
     let tot = $('.pageLink .fa.fa-code.grey-text');
     let solved = $(".pageLink span+.green-text");
+    count=count+solved.length;
     return solved.length;
 
 
 }
 
-            // request(url1,main);
-
-            // function main(error,response,html){
-            //     if(error){
-            //         console.log(error);
-            //     }else{
-            //         let solved = findq(html);
-            //         console.log(solved);
-            //     }
-            // }
-            
-            // function findq(html){
-            //     let $ = cheerio.load(html);
-            //     let tot = $('.pageLink .fa.fa-code.grey-text');
-            //     let solved = $(".pageLink span+.green-text");
-            //     return solved.length;
-            
-            // }
-
-
-
-
         }catch(error){
             console.log(error);
-        }
-            
-       
+        }       
        
         
-        // console.log(count);
 }
 
 
 
 
+function display(){
+    let c=0;
+    for(let i=0;i<obj.length;i++){
+        c+=obj[i];
+        // console.log("you solved ",obj[i]);
+    }
+    console.log("total question solved: "+c);
+}
