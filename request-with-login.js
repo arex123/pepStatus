@@ -19,8 +19,8 @@ async function main(){
             "https://www.pepcoding.com/login",
             {
                 form:{
-                    email:"ad47kumar@gmail.com",
-                    password:"Hello@123"             
+                    email: ADD-YOUR-EMAIL,
+                    password: ADD-YOUR-PASSWORD          
                 },
                 headers:{
                     'content-type': 'application/x-www-form-urlencoded'
